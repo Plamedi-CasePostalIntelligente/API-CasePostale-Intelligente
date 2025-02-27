@@ -1,8 +1,14 @@
 const connectToBD = require('../config/config');
 const express = require('express');
 app = express();
+const validator = require("validator");
+const bcrypt = require("bcrypt");
+const jwtUtil = require("../utils/jwtUtil");
 app.use(express.json());
 
+function sanitizeField(field) {
+    return validator.escape(field);
+}
 
 exports.getUser = async function (req, res) {
     try {
@@ -17,7 +23,7 @@ exports.getUser = async function (req, res) {
 }
 
 exports.getAppToken = async function (req, res) {
-    console.log("user/getAppToken");
+    console.log("users/getAppToken");
     console.log(process.env.CREATION_EMAIL);
     console.log(process.env.CREATION_PASS);
 
@@ -29,7 +35,6 @@ exports.getAppToken = async function (req, res) {
     if (!(email && pass)) {
         return res.status(400).send({ message: "All input is required" });
     }
-
     //Verifier si on l'authorise
     if (email != process.env.CREATION_EMAIL || pass != process.env.CREATION_PASS)
         return res.status(401).send({ message: "Ask administrator for access" });
@@ -40,51 +45,51 @@ exports.getAppToken = async function (req, res) {
 
 exports.login = async function (req, res) {
     try {
-      const { email, password } = req.body;
-      console.log(email + " + " + password);
-  
-      const connection = await connectToBD();
-  
-      if (!(email && password)) {
-        return res.status(400).send({ message: "Tout les champs sont requis" });
-      }
-  
-      let Tempemail = sanitizeField(email);
-      let TempPassword = sanitizeField(password);
-  
-      if (email != Tempemail || password != TempPassword) {
-        console.log("Champs invalide");
-        return res
-          .status(400)
-          .send({
-            message:
-              "Champs invalide. Veuillez vérifier les caractère spéciaux et veuillez réesayer !",
-          });
-      }
-  
-         const [rows] = await connection.execute(
-                'SELECT * FROM Utilisateur WHERE adresseCourrielUtilisateur = ?',
-                [email] // Paramètre à passer pour l'email
-          );
-      if ([rows] == null) {
-        res.status(409);
-        res.send({
-          message: "Erreur lors de la sélection de l'usager. Veuillez reesayer",
-        });
-      } else {
-        const user = rows[0];
-        if (user && (await bcrypt.compare(password, user.motDePasseUtilisateur))) {
-          const bearerToken = jwtUtil.generateAccessToken(
-            user.adresseCourrielUser
-          );
-          idUtilisateur = user.idUtilisateur;
-          console.log("idUtilisateur: " + idUtilisateur);
-          res.json({ bearerToken , idUtilisateur});
-        } else {
-          res.status(400).send({ message: "Courriel ou mot de passe invalide" });
+        const { email, password } = req.body;
+        console.log(email + " + " + password);
+
+        const connection = await connectToBD();
+
+        if (!(email && password)) {
+            return res.status(400).send({ message: "Tout les champs sont requis" });
         }
-      }
+
+        let Tempemail = sanitizeField(email);
+        let TempPassword = sanitizeField(password);
+
+        if (email != Tempemail || password != TempPassword) {
+            console.log("Champs invalide");
+            return res
+                .status(400)
+                .send({
+                    message:
+                        "Champs invalide. Veuillez vérifier les caractère spéciaux et veuillez réesayer !",
+                });
+        }
+
+        const [rows] = await connection.execute(
+            'SELECT * FROM Clients WHERE courriel = ?',
+            [email] // Paramètre à passer pour l'email
+        );
+        if ([rows] == null) {
+            res.status(409);
+            res.send({
+                message: "Erreur lors de la sélection de l'usager. Veuillez reesayer",
+            });
+        } else {
+            const user = rows[0];
+            if (user && (await bcrypt.compare(password, user.motDePasse))) {
+                const bearerToken = jwtUtil.generateAccessToken(
+                    user.courriel
+                );
+                idUtilisateur = user.idUtilisateur;
+                console.log("idUtilisateur: " + idUtilisateur);
+                res.json({ bearerToken, idUtilisateur });
+            } else {
+                res.status(400).send({ message: "Courriel ou mot de passe invalide" });
+            }
+        }
     } catch (err) {
-      console.log(err);
+        console.log(err);
     }
-  };
+};
