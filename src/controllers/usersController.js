@@ -1,5 +1,3 @@
-const sql = require('mysql2');
-const dotenv = require('dotenv');
 const connectToBD = require('../config/config');
 const express = require('express');
 app = express();
