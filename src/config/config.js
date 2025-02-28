@@ -12,7 +12,8 @@ const dbConfig = {
 
 const connectToBD = async () => {
     try {
-        const connection = await sql.createPool(dbConfig);
+        const pool = await sql.createPool(dbConfig);
+        const connection = await pool.getConnection();
 
         if(connection)
         {
