@@ -11,6 +11,10 @@ app.use(express.json());
 
 connectToBD();
 
+app.get('/', (req, res) => {
+  res.send('Bienvenue sur l\'API Case Postale Intelligente !');
+});
+
 const usersRoute = require('./routes/usersRoute');
 app.use('/api/users', usersRoute);
 
