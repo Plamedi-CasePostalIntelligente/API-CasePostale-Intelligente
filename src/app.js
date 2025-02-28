@@ -20,7 +20,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Erreur serveur !' });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3003;
 app.listen(PORT, () => {
   console.log(`Serveur démarré sur le port ${PORT}`);
 });
