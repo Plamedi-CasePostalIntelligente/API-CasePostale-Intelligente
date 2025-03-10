@@ -12,7 +12,10 @@ app.use(express.json());
 connectToBD();
 
 const usersRoute = require('./routes/usersRoute');
+const lockersRoute = require('./routes/lockersRoute');
 app.use('/api/users', usersRoute);
+app.use('/api/lockers', lockersRoute);
+// Routes
 
 // Gestion des erreurs
 app.use((err, req, res, next) => {
