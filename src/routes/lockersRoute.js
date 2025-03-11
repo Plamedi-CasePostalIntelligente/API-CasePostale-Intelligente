@@ -5,5 +5,6 @@ const lockersController = require('../controllers/lockersController');
 
 router.post('/openLocker', lockersController.openLocker);
 router.post('/UpdateShippingStatus', lockersController.UpdateShippingStatus);
+router.post('/verifyIfFactor', lockersController.verifyIfFactor);
 
 module.exports=router;
