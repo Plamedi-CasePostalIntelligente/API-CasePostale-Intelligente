@@ -68,7 +68,7 @@ exports.login = async function (req, res) {
         }
 
         const [rows] = await connection.execute(
-            'SELECT * FROM users WHERE courriel = ?',
+            'SELECT * FROM Users WHERE courriel = ?',
             [email] // Paramètre à passer pour l'email
         );
         if ([rows] == null) {
