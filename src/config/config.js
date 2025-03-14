@@ -13,15 +13,10 @@ const dbConfig = {
 
 const connectToBD = async () => {
     try {
-<<<<<<< HEAD
-        const pool = await sql.createPool(dbConfig);
-        const connection = await pool.getConnection();
-=======
         const connection = await sql.createPool(dbConfig);
         console.log("Connexion à la base de données réussie !");
         return connection;
 
->>>>>>> 12b6dbb8dc904de8524e997b12975786f8c4eb2b
 
     } catch (err) {
         console.error("Erreur de connexion à la base de données : ", err);
