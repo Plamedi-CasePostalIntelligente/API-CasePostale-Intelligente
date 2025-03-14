@@ -14,10 +14,12 @@ connectToBD();
 const usersRoute = require('./routes/usersRoute');
 const lockersRoute = require('./routes/lockersRoute');
 const brokerRoute = require('./routes/brokerRoute')
+const deliveryRoute = require('./routes/deliveryRoute');
 
 app.use('/api/users', usersRoute);
 app.use('/api/lockers', lockersRoute);
 app.use('/api/broker',brokerRoute)
+app.use('/api/delivery', deliveryRoute);
 // Routes
 
 // Gestion des erreurs
