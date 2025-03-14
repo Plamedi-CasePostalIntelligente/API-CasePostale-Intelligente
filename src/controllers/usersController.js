@@ -13,7 +13,7 @@ function sanitizeField(field) {
 exports.getUser = async function (req, res) {
     try {
         const connection = await connectToBD();
-        const [rows] = await connection.query(' SELECT * FROM Clients');
+        const [rows] = await connection.query(' SELECT * FROM Users');
         console.log(rows);
         return res.status(200).json(rows);
     } catch (error) {
@@ -68,7 +68,7 @@ exports.login = async function (req, res) {
         }
 
         const [rows] = await connection.execute(
-            'SELECT * FROM Clients WHERE courriel = ?',
+            'SELECT * FROM users WHERE courriel = ?',
             [email] // Paramètre à passer pour l'email
         );
         if ([rows] == null) {
@@ -78,13 +78,13 @@ exports.login = async function (req, res) {
             });
         } else {
             const user = rows[0];
-            if (user && (await bcrypt.compare(password, user.motDePasse))) {
+            if (user && (await bcrypt.compare(password, user.mot_de_passe))) {
                 const bearerToken = jwtUtil.generateAccessToken(
                     user.courriel
                 );
-                idUtilisateur = user.idUtilisateur;
-                console.log("idUtilisateur: " + idUtilisateur);
-                res.json({ bearerToken, idUtilisateur });
+                userId = user.id_user;
+                console.log("idUtilisateur: " + userId);
+                res.status(201).json({ bearerToken, userId , message: "Connexion réussie" });
             } else {
                 res.status(400).send({ message: "Courriel ou mot de passe invalide" });
             }
@@ -93,3 +93,4 @@ exports.login = async function (req, res) {
         console.log(err);
     }
 };
+
