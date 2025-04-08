@@ -80,7 +80,8 @@ exports.login = async function (req, res) {
             const user = rows[0];
             if (user && (await bcrypt.compare(password, user.mot_de_passe))) {
                 const bearerToken = jwtUtil.generateAccessToken(
-                    user.courriel
+                    user.courriel,
+                    user.is_admin
                 );
                 userId = user.id_user;
                 console.log("idUtilisateur: " + userId);
