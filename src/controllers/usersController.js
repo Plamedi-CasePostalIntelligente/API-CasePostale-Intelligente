@@ -84,8 +84,9 @@ exports.login = async function (req, res) {
                     user.is_admin
                 );
                 userId = user.id_user;
+                userAdmin = user.is_admin;
                 console.log("idUtilisateur: " + userId);
-                res.status(201).json({ bearerToken, userId , message: "Connexion réussie" });
+                res.status(201).json({ bearerToken, userId, userAdmin , message: "Connexion réussie" });
             } else {
                 res.status(400).send({ message: "Courriel ou mot de passe invalide" });
             }

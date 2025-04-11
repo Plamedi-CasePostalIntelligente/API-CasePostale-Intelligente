@@ -4,8 +4,8 @@ const JWT_SIGN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const TOKEN_EXPIRE = process.env.BEARER_TOKEN_EXPIRE;
 
 module.exports = {
-  generateAccessToken: function (email) {
-    return jwt.sign({ email: email }, JWT_SIGN_SECRET, {
+  generateAccessToken: function (email,is_admin) {
+    return jwt.sign({ email: email ,isAdmin: is_admin }, JWT_SIGN_SECRET, {
       expiresIn: TOKEN_EXPIRE,  
     });
   },

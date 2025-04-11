@@ -131,7 +131,7 @@ exports.verifyIfFactorHasDelivery = async function (req, res) {
     try {
         const connection = await connectToBD();
         const [rows] = await connection.query(
-            `SELECT L.id_facteur
+            `SELECT L.id_facteur , L.id_client
              FROM Livraisons L
              INNER JOIN Users U ON (L.id_client = U.id_user OR L.id_facteur = U.id_user)
              WHERE U.uid_user = ?`,
@@ -143,9 +143,10 @@ exports.verifyIfFactorHasDelivery = async function (req, res) {
         }
 
         const idHasDelivery = rows[0].id_facteur;
+        const idHasClient = rows[0].id_client;
         const hasFactorDelivery = idHasDelivery ? "1" : "0";
 
-        return res.status(200).json({ hasFactorDelivery, idHasDelivery });
+        return res.status(200).json({ hasFactorDelivery, idHasDelivery , idHasClient });
 
     }
     catch (error) {
@@ -154,6 +155,7 @@ exports.verifyIfFactorHasDelivery = async function (req, res) {
     }
 };
 
+//À mettre en commentaire pour le moment
 exports.verifyIfClientHasDelivery = async function (req, res) {
     const { uid } = req.body;
     try {
@@ -186,9 +188,9 @@ exports.isClientDelivered = async function (req, res) {
     try {
         const connection = await connectToBD();
         const [rows] = await connection.query(
-            `SELECT L.is_delivered
+            `SELECT L.is_delivered , L.id_client
              FROM Livraisons L
-             INNER JOIN Users U ON L.id_client = U.id_user 
+             INNER JOIN Users U ON (L.id_client = U.id_user OR L.id_facteur = U.id_user)
              WHERE U.uid_user = ?`,
             [req.body.uid]
         );
@@ -198,6 +200,7 @@ exports.isClientDelivered = async function (req, res) {
         }
 
         const isDelivered = rows[0].is_delivered;
+
         const isClientDelivered = isDelivered ? "Delivered" : "Not delivered";
 
         return res.status(200).json({ isClientDelivered, isDelivered });
@@ -208,6 +211,7 @@ exports.isClientDelivered = async function (req, res) {
     }
 };
 
+//À mettre en commentaire pour le moment
 exports.hasFactorDelivered = async function (req, res) {
     const { uid } = req.body;
     try {
@@ -240,10 +244,10 @@ exports.isClientCaseFilled = async function (req, res) {
     try {
         const connection = await connectToBD();
         const [rows] = await connection.query(
-            `SELECT C.is_full
+            `SELECT C.is_full 
              FROM Casiers C
              INNER JOIN Livraisons L ON C.id_casier = L.id_casier
-             INNER JOIN Users U ON L.id_client = U.id_user 
+             INNER JOIN Users U ON (L.id_client = U.id_user OR L.id_facteur = U.id_user)
              WHERE U.uid_user = ?`,
             [req.body.uid]
         );
@@ -262,7 +266,7 @@ exports.isClientCaseFilled = async function (req, res) {
         res.status(500).json({ message: "Erreur lors de la vérification" });
     }
 };
-
+//À mettre en commentaire pour le moment
 exports.isFactorCaseEmptied = async function (req, res) {
     const { uid } = req.body;
     try {
@@ -299,7 +303,7 @@ exports.openFactorCase = async function (req, res) {
             `SELECT C.numero_casier
              FROM Casiers C
              INNER JOIN Livraisons L ON C.id_casier = L.id_casier
-             INNER JOIN Users U ON L.id_facteur = U.id_user 
+             INNER JOIN Users U ON (L.id_facteur = U.id_user OR L.id_client = U.id_user)
              WHERE U.uid_user = ?`,
             [req.body.uid]
         );
@@ -318,7 +322,7 @@ exports.openFactorCase = async function (req, res) {
         res.status(500).json({ message: "Erreur lors de la vérification" });
     }
 };
-
+//À mettre en commentaire pour le moment
 exports.openClientCase = async function (req, res) {
     const { uid } = req.body;
     try {
