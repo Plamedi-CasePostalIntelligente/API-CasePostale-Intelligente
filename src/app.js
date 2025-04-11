@@ -19,11 +19,18 @@ const usersRoute = require('./routes/usersRoute');
 const lockersRoute = require('./routes/lockersRoute');
 const brokerRoute = require('./routes/brokerRoute')
 const deliveryRoute = require('./routes/deliveryRoute');
+const cityRoute = require('./routes/cityRoute');
+const accessTryRoute = require('./routes/accessTryRoute')
+const casierRoute = require('./routes/casierRoute')
+// Routes
 
 app.use('/api/users', usersRoute);
 app.use('/api/lockers', lockersRoute);
 app.use('/api/broker',brokerRoute)
 app.use('/api/delivery', deliveryRoute);
+app.use('/api/city', cityRoute);
+app.use('/api/accessTry', accessTryRoute)
+app.use('/api/casier', casierRoute);
 // Routes
 
 // Gestion des erreurs
