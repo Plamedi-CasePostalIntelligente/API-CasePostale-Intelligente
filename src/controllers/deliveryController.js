@@ -1,4 +1,4 @@
-const connectToBD = require('../config/config');
+const pool = require('../config/config');
 const express = require('express');
 app = express();
 const validator = require("validator");
@@ -8,8 +8,7 @@ app.use(express.json());
 
 exports.getAllDelivery = async function (req, res) {
     try {
-        const connection = await connectToBD();
-        const [rows] = await connection.query(
+        const [rows] = await pool.query(
             `SELECT L.description, L.expediteur, L.is_delivered, L.adresse
              FROM Livraisons L`
         );

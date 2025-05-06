@@ -1,4 +1,4 @@
-const connectToBD = require('../config/config');
+const pool = require('../config/config');
 const express = require('express');
 app = express();
 const validator = require("validator");
@@ -8,8 +8,7 @@ app.use(express.json());
 
 exports.getAllCasierStatut = async function (req, res) {
     try {
-        const connection = await connectToBD();
-        const [rows] = await connection.query(
+        const [rows] = await pool.query(
             `SELECT 
                 C.id_casier AS id,
                 V.ville,

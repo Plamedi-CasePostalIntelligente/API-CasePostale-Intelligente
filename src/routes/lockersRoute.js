@@ -1,18 +1,21 @@
-
 const express = require('express');
 const router = express.Router();
 const lockersController = require('../controllers/lockersController');
 
-router.post('/verifyIfFactor', lockersController.verifyIfFactor);
-router.post('/verifyIfClientHasDelivery',lockersController.verifyIfClientHasDelivery);
-router.post('/verifyIfFactorHasDelivery',lockersController.verifyIfFactorHasDelivery);
-router.post('/hasFactorDelivered',lockersController.hasFactorDelivered);
-router.post('/isClientDelivered',lockersController.isClientDelivered);
-router.post('/isClientCaseFilled',lockersController.isClientCaseFilled);
-router.post('/isFactorCaseEmptied',lockersController.isFactorCaseEmptied);
-router.post('/openClientCase',lockersController.openClientCase);
-router.post('/openFactorCase',lockersController.openFactorCase);
-router.post('/UpdateCaseState',lockersController.UpdateCaseState);
-router.post('/UpdateDeliveryState',lockersController.UpdateDeliveryState);
+router.get('/verifyIfFactor/:uid', lockersController.verifyIfFactor);
+// Route commentée car la méthode correspondante est commentée
+// router.get('/verifyIfClientHasDelivery/:uid', lockersController.verifyIfClientHasDelivery);
+router.get('/verifyIfHasDelivery/:uid', lockersController.verifyIfHasDelivery); // Corrigé
+// Route commentée car la méthode correspondante est commentée
+// router.get('/hasFactorDelivered/:uid', lockersController.hasFactorDelivered);
+router.get('/isDelivered/:uid', lockersController.isDelivered); // Corrigé
+router.get('/isCaseFilled/:uid', lockersController.isCaseFilled); // Corrigé
+// Route commentée car la méthode correspondante est commentée
+// router.get('/isFactorCaseEmptied/:uid', lockersController.isFactorCaseEmptied);
+// Route commentée car la méthode correspondante est commentée
+// router.get('/openClientCase/:uid', lockersController.openClientCase);
+router.get('/openCase/:uid', lockersController.openCase); // Corrigé
+router.post('/updateCaseState', lockersController.updateCaseState); // Changé en POST
+router.post('/updateDeliveryState', lockersController.updateDeliveryState);
 
-module.exports=router;
+module.exports = router;
